@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Controller : MonoBehaviour
 {
     public static Controller instance;
-    public Grid grid;
+    // public Grid grid;
     private bool playerTurn = true;
     public Piece cur_piece;
     public Piece pref_piece;
@@ -32,7 +32,7 @@ public class Controller : MonoBehaviour
         GameObject.DontDestroyOnLoad(this.gameObject);
         playerTurn = true;
 
-        grid.GenerateGrid();
+        Grid.instance.GenerateGrid();
         SpawnPiece();
     }
 
@@ -45,7 +45,7 @@ public class Controller : MonoBehaviour
     {
         
     }
-    public void SpawnPiece()
+    public void SpawnPieceLama()
     {
         // for (int i = 0; i < grid.transform.childCount; i++)
         // {
@@ -55,7 +55,7 @@ public class Controller : MonoBehaviour
         {
             if(i==9) {i=6; continue;}
             if(i==16) {i=15; continue;}
-            GameObject childObject = grid.transform.GetChild(i).gameObject;
+            GameObject childObject = Grid.instance.transform.GetChild(i).gameObject;
             Tile tile = childObject.GetComponent<Tile>();
             Spawn(tile,false,false);
         }
@@ -63,9 +63,33 @@ public class Controller : MonoBehaviour
         {
             if(i==48) {i=47; continue;}
             if(i==57) {i=54; continue;}
-            GameObject childObject = grid.transform.GetChild(i).gameObject;
+            GameObject childObject = Grid.instance.transform.GetChild(i).gameObject;
             Tile tile = childObject.GetComponent<Tile>();
             Spawn(tile,true,false);
+        }
+    }
+    public void SpawnPiece()
+    {
+        for(int i=0; i<3; i++)
+        {
+            int js = i%2==0 ? 1 : 0;
+            int je = i%2==0 ? 7 : 6;
+            for(int j=js; j<=je; j+=2)
+            {
+                Tile tile = Grid.instance.arr[i,j];
+                Spawn(tile, false,false);
+            }
+        }
+
+        for(int i=5; i<8; i++)
+        {
+            int js = i%2==0 ? 1 : 0;
+            int je = i%2==0 ? 7 : 6;
+            for(int j=js; j<=je; j+=2)
+            {
+                Tile tile = Grid.instance.arr[i,j];
+                Spawn(tile, true,false);
+            }
         }
     }
     public void Spawn(Tile tile, bool isPlayer, bool isKing)
@@ -73,6 +97,8 @@ public class Controller : MonoBehaviour
         Piece spawned = Instantiate(pref_piece);
         spawned.isPlayer = isPlayer;
         spawned.isKing = isKing;
+        spawned.row = tile.row;
+        spawned.col = tile.col;
         
         spawned.transform.SetParent(tile.GetComponent<RectTransform>());
     }

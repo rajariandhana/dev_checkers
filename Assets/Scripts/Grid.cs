@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class Grid : MonoBehaviour
 {
     // public Image white, black;
-    public RectTransform grid;
+    public static Grid instance;
+    public RectTransform rt;
     public Tile pref_tile;
     // public Sprite white, black;
 
@@ -15,9 +16,7 @@ public class Grid : MonoBehaviour
 
     private bool isWhite=true;
 
-    private void Start() {
-        // GenerateGrid();
-    }
+    public Tile[,] arr;
 
     public void GenerateGrid()
     {
@@ -27,14 +26,28 @@ public class Grid : MonoBehaviour
             {
                 Tile spawned = Instantiate(pref_tile);
                 spawned.isWhite = isWhite;
-                spawned.transform.SetParent(grid);
+                spawned.transform.SetParent(rt);
 
                 spawned.row = i;
                 spawned.col = j;
+                spawned.name = $"Tile {i} {j}";
+
+                arr[i,j] = spawned;
 
                 isWhite = !isWhite;
             }
             isWhite = !isWhite;
         }
+    }
+    void Start()
+    {
+        if(instance != null)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        instance = this;
+        GameObject.DontDestroyOnLoad(this.gameObject);
+        arr = new Tile[8,8];
     }
 }

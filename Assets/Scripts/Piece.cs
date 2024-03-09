@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Piece : MonoBehaviour, IPointerClickHandler
 {
     [HideInInspector] public Transform parentAfterDrag;
-    public bool isPlayer;
-    public bool isKing;
+    public bool isPlayer, isKing;
+    public int row, col;
     public bool GetType()
     {
         return isPlayer;
