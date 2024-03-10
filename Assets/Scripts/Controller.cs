@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 public class Controller : MonoBehaviour
 {
@@ -51,9 +51,6 @@ public class Controller : MonoBehaviour
         PieceManager.instance.SpawnStartingPiece();
     }
 
-    public void NewGame()
-    {
-        SceneManager.LoadScene("Game");
-    }
+    
 
 }
