@@ -7,11 +7,14 @@ using System;
 
 public class Tile : MonoBehaviour, IPointerClickHandler
 {
+    private void Start() {
+        Image im = GetComponent<Image>();
+        if(isWhite) im.sprite = Grid.instance.tile_white;
+        else im.sprite = Grid.instance.tile_black;
+    }
     public int row;
     public int col;
     public bool isWhite;
-    // public Image image;
-    // public Sprite sprite;
     public void OnPointerClick(PointerEventData ped)
     {
         if(Controller.instance.cur_piece != null)
@@ -80,7 +83,8 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     {
         if(pieceIsPlayer != tile.GetComponentInChildren<Piece>().isPlayer)
         {
-            Destroy(tile.GetComponentInChildren<Piece>().gameObject);
+            PieceManager.instance.DeletePiece(tile.GetComponentInChildren<Piece>());
+            // Destroy(tile.GetComponentInChildren<Piece>().gameObject);
             //score++;
             Controller.instance.ChangeTurn();
             Debug.Log(pieceIsPlayer?"Player eat":"Opponent eat");
@@ -94,11 +98,8 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         pc.transform.position = transform.position;
         pc.row = row;
         pc.col = col;
+        pc.ChangePieceType();
         Debug.Log(Controller.instance.cur_piece.Data() + " moved to "+row+" "+col);
     }
-    private void Start() {
-        Image im = GetComponent<Image>();
-        if(isWhite) im.sprite = Controller.instance.tile_white;
-        else im.sprite = Controller.instance.tile_black;
-    }
+    
 }

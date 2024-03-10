@@ -15,16 +15,31 @@ public class Piece : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData ped)
     {
         // Piece pc = ped.GetComponent<Piece>();
-        Debug.Log("Piece clicked "+Data());
         if(Controller.instance.GetTurn() == isPlayer)
         {
+            Debug.Log("Piece clicked "+Data());
             Controller.instance.cur_piece = this;
         }
     }
     private void Start() {
         Image im = GetComponent<Image>();
-        if(isPlayer) im.sprite = Controller.instance.dark_plain;
-        else im.sprite = Controller.instance.light_plain;
+        if(isPlayer) im.sprite = PieceManager.instance.dark_plain;
+        else im.sprite = PieceManager.instance.light_plain;
+    }
+    public void ChangePieceType()
+    {
+        if(isPlayer && row==0)
+        {
+            isKing = true;
+            Image im = GetComponent<Image>();
+            im.sprite = PieceManager.instance.dark_king;
+        }
+        if(!isPlayer && row==7)
+        {
+            isKing = true;
+            Image im = GetComponent<Image>();
+            im.sprite = PieceManager.instance.light_king;
+        }
     }
 
     public string Data()
