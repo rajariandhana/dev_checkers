@@ -27,23 +27,27 @@ public class Grid : MonoBehaviour
 
     public void GenerateGrid()
     {
-        for(int i=0; i<8; i++)
+        // for(int i=0; i<8; i++)
+        // {
+        //     for(int j=0; j<8; j++)
+        //     {
+        //         SpawnTile(isWhite,i,j);
+        //         isWhite = !isWhite;
+        //     }
+        //     isWhite = !isWhite;
+        // }
+        int i=0;
+        int j=0;
+        foreach(Transform child in transform)
         {
-            for(int j=0; j<8; j++)
-            {
-                // Tile spawned = Instantiate(pref_tile);
-                // spawned.isWhite = isWhite;
-                // spawned.transform.SetParent(rt);
-
-                // spawned.row = i;
-                // spawned.col = j;
-                // spawned.name = $"Tile {i} {j}";
-
-                // arr[i,j] = spawned;
-                SpawnTile(isWhite,i,j);
-                isWhite = !isWhite;
-            }
-            isWhite = !isWhite;
+            Tile x = child.GetComponent<Tile>();
+            arr[i,j] = x;
+            x.row = i;
+            x.col = j;
+            x.name = $"Tile {i} {j}";
+            j++;
+            if(j%8==0) {j=0; i++;}
+            // if(i==8 || j==8) return;
         }
     }
     private void SpawnTile(bool isWhite, int row, int col)
@@ -57,6 +61,5 @@ public class Grid : MonoBehaviour
         spawned.name = $"Tile {row} {col}";
 
         arr[row,col] = spawned;
-    }
-    
+    }    
 }

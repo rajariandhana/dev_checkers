@@ -5,17 +5,34 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class Tile : MonoBehaviour, IPointerClickHandler
+public class Tile : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
     private void Start() {
-        Image im = GetComponent<Image>();
-        if(isWhite) im.sprite = Grid.instance.tile_white;
-        else im.sprite = Grid.instance.tile_black;
+        // Image im = GetComponent<Image>();
+        // if(isWhite) im.sprite = Grid.instance.tile_white;
+        // else im.sprite = Grid.instance.tile_black;
     }
     public int row;
     public int col;
     public bool isWhite;
     public void OnPointerClick(PointerEventData ped)
+    {
+        if(Controller.instance.cur_piece != null)
+        {
+            Piece cur = Controller.instance.cur_piece;
+            if(TileIsEmpty())
+            {
+                bool valid = cur.isKing ? KingValidMove(cur) : PlainValidMove(cur);
+                if(valid)
+                {
+                    MovePiece(cur);
+                    Controller.instance.cur_piece = null;
+                    Controller.instance.ChangeTurn();
+                }
+            }
+        }
+    }
+    public void OnDrop(PointerEventData ped)
     {
         if(Controller.instance.cur_piece != null)
         {
@@ -94,12 +111,14 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     }
     private void MovePiece(Piece pc)
     {
-        pc.transform.SetParent(GetComponent<RectTransform>());
-        pc.transform.position = transform.position;
+        // pc.transform.SetParent(GetComponent<RectTransform>());
+        // pc.transform.position = transform.position;
         pc.row = row;
         pc.col = col;
         pc.ChangePieceType();
         Debug.Log(Controller.instance.cur_piece.Data() + " moved to "+row+" "+col);
+        pc.oriParent = GetComponent<RectTransform>();
+        pc.oriPos = transform.position;
     }
     
 }

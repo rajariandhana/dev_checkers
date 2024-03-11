@@ -29,7 +29,7 @@ public class PieceManager : MonoBehaviour
 
     public void SpawnStartingPiece()
     {
-        StartCoroutine(Wait(10.0f));
+        // StartCoroutine(Wait(10.0f));
         for(int i=0; i<3; i++)
         {
             int js = i%2==0 ? 1 : 0;
@@ -58,7 +58,8 @@ public class PieceManager : MonoBehaviour
     }
     public void SpawnPiece(Tile tile, bool isPlayer)
     {
-        StartCoroutine(Wait(1.0f));
+        // Piece spawned = tile.GetComponentInChildren<Piece>();
+        // StartCoroutine(Wait(1.0f));
         Piece spawned = Instantiate(pref_piece);
         spawned.isPlayer = isPlayer;
         spawned.row = tile.row;
@@ -67,6 +68,7 @@ public class PieceManager : MonoBehaviour
         else num_piece_opponent++;
         
         spawned.transform.SetParent(tile.GetComponent<RectTransform>());
+        spawned.transform.position = tile.transform.position;
     }
     public void DeletePiece(Piece pc)
     {
